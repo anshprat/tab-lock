@@ -76,6 +76,32 @@ button:disabled {
   opacity: 0.6;
   cursor: default;
 }
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 0;
+  color: #6b7280;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #374151;
+}
+.secondary {
+  width: 100%;
+  background: transparent;
+  border: 1px solid #374151;
+  color: #f3f4f6;
+}
+.secondary:hover {
+  background: #27303f;
+}
 .error {
   min-height: 16px;
   margin: 14px 0 0;

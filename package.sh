@@ -20,7 +20,7 @@ echo -e "${BLUE}Packaging ${NAME} v${VERSION}...${NC}"
 
 # Zip the whole extension dir, excluding dev/meta/store/doc files.
 zip -r "$ZIP_NAME" . \
-    -x "*.DS_Store" ".git/*" "_metadata/*" "store/*" \
+    -x "*.DS_Store" ".git/*" "_metadata/*" "store/*" "native-host/*" \
        "package.sh" "README.md" "SCAFFOLD.md" "PRIVACY_POLICY.md" "chrome-submission.md" \
        ".gitignore" "*.zip" "*.md"
 

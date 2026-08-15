@@ -3,7 +3,7 @@
   "name": "Tab Lock",
   "version": "1.0.0",
   "description": "Lock chosen websites behind a password. Blocked before they load, and re-locked the moment you switch away.",
-  "permissions": ["storage", "tabs", "webNavigation", "alarms"],
+  "permissions": ["storage", "tabs", "webNavigation", "alarms", "nativeMessaging"],
   "host_permissions": ["<all_urls>"],
   "background": {
     "service_worker": "background.js"

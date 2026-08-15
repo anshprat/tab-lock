@@ -14,6 +14,7 @@ const LOCK_URL = chrome.runtime.getURL(LOCK_PAGE_PATH);
 const PBKDF2_ITERATIONS = 150000;
 const MAX_ATTEMPTS = 5;
 const LOCKOUT_MS = 30000;
+const TOUCHID_HOST = 'com.anshprat.tablock.touchid';
 const DEFAULT_SETTINGS = {
   // 0 = relock the instant the tab loses focus/is switched away from.
   // N > 0 = stay unlocked for N minutes regardless of tab switches.
@@ -307,6 +308,45 @@ chrome.runtime.onInstalled.addListener(async () => {
 
 // ---------- messages from lock.html / options.html / popup.html ----------
 
+// ---------- Touch ID (native messaging host, see native-host/) ----------
+
+function sendNativeMessage(message) {
+  return new Promise((resolve) => {
+    try {
+      chrome.runtime.sendNativeMessage(TOUCHID_HOST, message, (response) => {
+        if (chrome.runtime.lastError) {
+          resolve({ error: chrome.runtime.lastError.message });
+          return;
+        }
+        resolve(response || {});
+      });
+    } catch (err) {
+      resolve({ error: err.message });
+    }
+  });
+}
+
+async function attemptTouchIdUnlock(tabId) {
+  const pending = await getPendingReturn(tabId);
+  if (!pending) return { success: false, error: 'Nothing to unlock.' };
+
+  const { settings } = await getLocal();
+  const response = await sendNativeMessage({ action: 'authenticate', reason: `unlock ${pending.hostname}` });
+
+  if (!response.success) {
+    return { success: false, error: response.error || 'Touch ID authentication failed.' };
+  }
+
+  await unlockSite(pending.siteId, settings.unlockDurationMinutes);
+  await clearPendingReturn(tabId);
+  try {
+    await chrome.tabs.update(tabId, { url: pending.url });
+  } catch {
+    // Tab may have been closed while the Touch ID prompt was open.
+  }
+  return { success: true };
+}
+
 async function attemptUnlock(tabId, password) {
   const pending = await getPendingReturn(tabId);
   if (!pending) return { success: false, error: 'Nothing to unlock.' };
@@ -355,6 +395,15 @@ async function handleMessage(message, sender) {
       const tabId = sender.tab && sender.tab.id;
       if (tabId === undefined) return { success: false, error: 'No tab context.' };
       return attemptUnlock(tabId, message.password);
+    }
+    case 'checkTouchId': {
+      const response = await sendNativeMessage({ action: 'check' });
+      return { available: !!response.available };
+    }
+    case 'attemptTouchIdUnlock': {
+      const tabId = sender.tab && sender.tab.id;
+      if (tabId === undefined) return { success: false, error: 'No tab context.' };
+      return attemptTouchIdUnlock(tabId);
     }
     case 'hasPassword': {
       const { passwordHash } = await getLocal();
