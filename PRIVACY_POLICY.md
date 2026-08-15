@@ -36,6 +36,10 @@ All data the extension creates — your list of locked domains, your password (a
 
 > Used to automatically re-lock a site once a timed unlock period (e.g. "stay unlocked for 15 minutes") that you configured has expired.
 
+### nativeMessaging
+
+> Used only if you opt in by installing the optional local Touch ID helper (see README). Lets the extension send a single local message to that helper asking whether the device owner can be verified biometrically, and receive a plain success/failure back. The helper never receives your password or locked-site list, and no data leaves your device.
+
 ### Host Permissions: `<all_urls>`
 
 > Required to check the hostname of any tab against your locked-site list. Because you can choose to lock any website, the extension needs the ability to inspect the URL of any tab — it does not fetch, read, or transmit the content of any page.
@@ -51,7 +55,7 @@ The extension performs only the following operations, entirely on your device:
 
 ## Third-Party Services
 
-None. This extension does not communicate with any third-party service, API, or server.
+None. This extension does not communicate with any third-party service, API, or server. The optional Touch ID helper (installed separately, opt-in) is a local process on your own machine, not a third-party service — it communicates only over stdio with the extension and never accesses the network.
 
 ## Data Security
 

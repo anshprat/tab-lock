@@ -24,6 +24,10 @@ Answers for the Privacy practices tab when publishing.
 
 > Required to automatically re-lock a site once a user-configured timed unlock period has elapsed.
 
+### nativeMessaging
+
+> Used only when the user opts in by installing the extension's optional local Touch ID helper (a native messaging host the user installs themselves via a script in the repo). Lets the extension ask that local helper whether the device owner can be verified biometrically, receiving only a success/failure result — the helper never receives the user's password or locked-site list.
+
 ### Host Permission: `<all_urls>`
 
 > The user can choose to lock any website, so the extension needs to be able to check the hostname of any tab against the user's locked-site list. It does not read, modify, or transmit page content — only the tab's URL is inspected.
