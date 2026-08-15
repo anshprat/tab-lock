@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Tab Lock — Settings</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <main class="wrap">
+      <h1>Tab Lock</h1>
+
+      <section id="password-section">
+        <h2>Password</h2>
+        <div id="set-password-form-wrap" hidden>
+          <p class="hint">Set a password to start locking sites.</p>
+          <form id="set-password-form">
+            <input type="password" id="new-password" placeholder="New password" required minlength="4" />
+            <input type="password" id="confirm-password" placeholder="Confirm password" required minlength="4" />
+            <button type="submit">Set Password</button>
+          </form>
+        </div>
+        <div id="change-password-form-wrap" hidden>
+          <p class="hint">Password is set.</p>
+          <form id="change-password-form">
+            <input type="password" id="current-password" placeholder="Current password" required />
+            <input type="password" id="change-new-password" placeholder="New password" required minlength="4" />
+            <button type="submit">Change Password</button>
+          </form>
+        </div>
+        <p class="status" id="password-status"></p>
+      </section>
+
+      <section id="sites-section">
+        <h2>Locked Sites</h2>
+        <p class="hint">
+          Add a domain, e.g. <code>example.com</code> (locks all subdomains too) or
+          <code>mail.example.com</code> (locks just that subdomain).
+        </p>
+        <form id="add-site-form">
+          <input type="text" id="site-pattern" placeholder="example.com" required />
+          <button type="submit">Add</button>
+        </form>
+        <ul id="site-list"></ul>
+        <p class="status" id="sites-status"></p>
+      </section>
+
+      <section id="settings-section">
+        <h2>Lock Behavior</h2>
+        <label class="field">
+          Stay unlocked
+          <select id="unlock-duration">
+            <option value="0">Only while I'm on the tab (relock the instant I switch away)</option>
+            <option value="5">For 5 minutes after unlocking</option>
+            <option value="15">For 15 minutes after unlocking</option>
+            <option value="60">For 1 hour after unlocking</option>
+            <option value="-1">Until I close the browser</option>
+          </select>
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" id="lock-on-startup" />
+          Re-lock everything when Chrome restarts
+        </label>
+        <p class="status" id="settings-status"></p>
+      </section>
+
+      <p class="footnote">
+        This is a browser-level deterrent, not a security boundary — anyone with access to your
+        Chrome profile can disable this extension from <code>chrome://extensions</code>. There is
+        no password recovery; if you forget it, remove the extension's data from
+        <code>chrome://extensions</code> (or reinstall it) and set a new one.
+      </p>
+    </main>
+    <script src="options.js"></script>
+  </body>
+</html>
