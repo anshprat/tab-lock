@@ -1,0 +1,14 @@
+# Packaged builds
+*.zip
+
+# Chrome-generated caches (written into unpacked extension dirs)
+_metadata/
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+.playwright-mcp/
+.vscode/
+.idea/
+*.swp
+*~
